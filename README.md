@@ -1,163 +1,124 @@
-Explanation of the Code: Profit Maximization using Linear Programming (LP)
+Overview:
 
-This Python code uses the PuLP library to solve a Linear Programming problem for profit maximization. It aims to find the optimal production quantities of two products, Product A and Product B, while considering constraints on machine hours and labor hours. The objective is to maximize profit.
-
-
----
-
-1. Importing Necessary Libraries
-
-from pulp import LpMaximize, LpProblem, LpVariable, value
-
-LpMaximize: Specifies that the problem is a maximization problem.
-
-LpProblem: Defines the LP problem (i.e., an optimization problem).
-
-LpVariable: Used to create the decision variables for the problem.
-
-value: Extracts the value of the objective function after solving the problem.
-
+This program uses linear programming (LP) to solve an optimization problem aimed at maximizing the profit of a business, subject to resource constraints. It employs the PuLP library in Python to model and solve the optimization problem. Below is a detailed breakdown of the program:
 
 
 ---
 
-2. Defining the LP Model
+Step-by-Step Explanation:
 
-model = LpProblem(name="profit-maximization", sense=LpMaximize)
+1. Importing Necessary Libraries:
 
-A linear programming model is created with the name profit-maximization.
+from pulp import LpMaximize, LpProblem, LpVariable
 
-The sense of the problem is set to maximize (indicating a profit maximization problem).
+Here, we are importing three classes from the PuLP library:
 
+LpMaximize: This indicates that the objective is to maximize the function (i.e., maximize profit).
 
+LpProblem: This class is used to define the optimization problem itself. We specify the problem name and the goal (maximize or minimize).
 
----
+LpVariable: This class is used to define the decision variables, which represent the quantities we want to solve for (in this case, the number of products A and B).
 
-3. Defining the Decision Variables
 
-A = LpVariable(name="Product_A", lowBound=0, cat="Continuous")
-B = LpVariable(name="Product_B", lowBound=0, cat="Continuous")
 
-A and B are the decision variables representing the number of units of Product A and Product B to be produced.
+2. Defining the Problem:
 
-Both variables are restricted to be non-negative (lowBound=0) and are continuous (i.e., they can take any real value).
+problem = LpProblem("Maximize_Profit", LpMaximize)
 
+Here, we define an optimization problem with the name "Maximize_Profit".
 
+The goal is to maximize the objective function (LpMaximize). This tells the program that we want to find the values of our decision variables that will give us the highest profit.
 
----
 
-4. Defining the Objective Function
 
-model += 40 * A + 50 * B, "Total_Profit"
+3. Defining the Decision Variables:
 
-The objective is to maximize profit, where:
+x1 = LpVariable('x1', lowBound=0, cat='Continuous')  # Product A
+x2 = LpVariable('x2', lowBound=0, cat='Continuous')  # Product B
 
-Product A contributes $40 per unit.
+x1 and x2 represent the number of products A and B, respectively, that the company will produce.
 
-Product B contributes $50 per unit.
+lowBound=0 ensures that both variables are non-negative (i.e., the company cannot produce a negative number of products).
 
+cat='Continuous' specifies that the decision variables are continuous, meaning the company can produce fractional quantities (e.g., 2.5 products).
 
-The objective function is 40A + 50B, and is added to the model.
 
 
+4. Objective Function (Maximize Profit):
 
----
+problem += 10 * x1 + 15 * x2, "Total_Profit"
 
-5. Defining the Constraints
+This line sets the objective function to maximize profit.
 
-Machine Hours Constraint
+The profit per unit of Product A is 10, and the profit per unit of Product B is 15. Therefore, the objective function is:
 
-model += 2 * A + 4 * B <= 40, "Machine_Hours_Constraint"
 
-The total machine hours required for production cannot exceed 40.
 
-Product A requires 2 machine hours per unit, and Product B requires 4 machine hours per unit.
 
-The constraint is:
+\text{Total Profit} = 10 \times x1 + 15 \times x2
 
+5. Constraints:
 
-2A + 4B \leq 40
+problem += 4 * x1 + 3 * x2 <= 160, "Time_Constraint"
+problem += 2 * x1 + 3 * x2 <= 120, "Raw_Material_Constraint"
 
-Labor Hours Constraint
+These two lines define the resource constraints:
 
-model += 3 * A + 2 * B <= 30, "Labor_Hours_Constraint"
+Time Constraint: The production of Product A takes 4 hours, and Product B takes 3 hours. The company has a total of 160 hours available for production. Hence, the total production time constraint is:
 
-The total labor hours available are 30.
 
-Product A requires 3 labor hours per unit, and Product B requires 2 labor hours per unit.
 
-The constraint is:
 
 
-3A + 2B \leq 30
+4 \times x1 + 3 \times x2 \leq 160
 
+- *Raw Material Constraint*: Product A requires 2 units of raw material, and Product B requires 3 units. The company has 120 units of raw material available. Therefore, the raw material constraint is:
 
----
+2 \times x1 + 3 \times x2 \leq 120
 
-6. Solving the LP Problem
+These constraints ensure that the production does not exceed the available resources.
 
-model.solve()
+6. Solving the Problem:
 
-This line uses the PuLP solver to solve the LP problem. It finds the optimal values of A and B that maximize the profit while satisfying all the constraints.
+problem.solve()
 
+This command tells PuLP to solve the optimization problem. The solver will try to find values for x1 and x2 that maximize the total profit while satisfying the constraints.
 
 
----
 
-7. Printing the Results
+7. Getting the Solution:
 
-print(f"Optimal production of Product A: {A.varValue} units")
-print(f"Optimal production of Product B: {B.varValue} units")
-print(f"Maximum Profit: ${value(model.objective)}")
+x1_solution = x1.varValue
+x2_solution = x2.varValue
+max_profit = problem.objective.value()
 
-After solving the problem, the optimal values of A and B are printed. These values represent the optimal production quantities of Product A and Product B.
+After solving the problem, we retrieve the optimal values for x1 and x2 (i.e., the number of products A and B to produce) using .varValue.
 
-The maximum profit is calculated by evaluating the objective function at the optimal values of A and B.
+The total maximum profit is obtained using problem.objective.value(), which gives the value of the objective function at the optimal solution.
 
 
 
----
+8. Displaying the Results:
 
-Final Output Example:
+print(f"Optimal number of Product A to produce: {x1_solution}")
+print(f"Optimal number of Product B to produce: {x2_solution}")
+print(f"Maximum Profit: ${max_profit}")
 
-The program will output something like:
+These lines print the results:
 
-Optimal production of Product A: 4.0 units
-Optimal production of Product B: 5.0 units
-Maximum Profit: $370.0
+The optimal number of units of Product A and Product B to produce.
 
-This means the optimal solution is to produce 4 units of Product A and 5 units of Product B for a total maximum profit of $370.
+The maximum profit achievable given the constraints.
 
 
----
 
-Summary of the Problem:
-
-Objective: Maximize profit.
-
-Decision Variables: Quantity of Product A (A) and Product B (B).
-
-Objective Function: Profit = 40A + 50B.
-
-Constraints:
-
-Machine hours: 2A + 4B ≤ 40.
-
-Labor hours: 3A + 2B ≤ 30.
-
-
-Solution: Finds the optimal production quantities of Product A and Product B to maximize profit.
 
 
 
 ---
 
-Applications:
+Summary:
 
-This type of linear programming model is commonly used in:
+The program optimizes a production problem where a company manufactures two products, aiming to maximize profit. It takes into account constraints on time and raw materials. Using linear programming, the program calculates the optimal number of units to produce for each product in order to maximize profit while ensuring that production time and raw material limits are not exceeded.
 
-Manufacturing for optimizing production processes.
-
-Operations Research to allocate limited resources efficiently.
-
-Supply Chain Management to maximize profit while adhering to capacity and resource constraints.
+This example demonstrates how you can apply optimization techniques to solve real-world business problems using Python and the PuLP library.
