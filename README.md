@@ -19,7 +19,7 @@ LpProblem: This class is used to define the optimization problem itself. We spec
 
 LpVariable: This class is used to define the decision variables, which represent the quantities we want to solve for (in this case, the number of products A and B).
 
-
+---
 
 2. Defining the Problem:
 
@@ -29,7 +29,7 @@ Here, we define an optimization problem with the name "Maximize_Profit".
 
 The goal is to maximize the objective function (LpMaximize). This tells the program that we want to find the values of our decision variables that will give us the highest profit.
 
-
+---
 
 3. Defining the Decision Variables:
 
@@ -42,7 +42,7 @@ lowBound=0 ensures that both variables are non-negative (i.e., the company canno
 
 cat='Continuous' specifies that the decision variables are continuous, meaning the company can produce fractional quantities (e.g., 2.5 products).
 
-
+---
 
 4. Objective Function (Maximize Profit):
 
@@ -53,9 +53,9 @@ This line sets the objective function to maximize profit.
 The profit per unit of Product A is 10, and the profit per unit of Product B is 15. Therefore, the objective function is:
 
 
-
-
 \text{Total Profit} = 10 \times x1 + 15 \times x2
+
+---
 
 5. Constraints:
 
@@ -67,9 +67,6 @@ These two lines define the resource constraints:
 Time Constraint: The production of Product A takes 4 hours, and Product B takes 3 hours. The company has a total of 160 hours available for production. Hence, the total production time constraint is:
 
 
-
-
-
 4 \times x1 + 3 \times x2 \leq 160
 
 - *Raw Material Constraint*: Product A requires 2 units of raw material, and Product B requires 3 units. The company has 120 units of raw material available. Therefore, the raw material constraint is:
@@ -78,6 +75,8 @@ Time Constraint: The production of Product A takes 4 hours, and Product B takes 
 
 These constraints ensure that the production does not exceed the available resources.
 
+---
+
 6. Solving the Problem:
 
 problem.solve()
@@ -85,7 +84,7 @@ problem.solve()
 This command tells PuLP to solve the optimization problem. The solver will try to find values for x1 and x2 that maximize the total profit while satisfying the constraints.
 
 
-
+---
 7. Getting the Solution:
 
 x1_solution = x1.varValue
@@ -96,7 +95,7 @@ After solving the problem, we retrieve the optimal values for x1 and x2 (i.e., t
 
 The total maximum profit is obtained using problem.objective.value(), which gives the value of the objective function at the optimal solution.
 
-
+---
 
 8. Displaying the Results:
 
@@ -109,10 +108,6 @@ These lines print the results:
 The optimal number of units of Product A and Product B to produce.
 
 The maximum profit achievable given the constraints.
-
-
-
-
 
 
 ---
