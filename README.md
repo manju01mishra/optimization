@@ -3,6 +3,7 @@ Explanation of the Code: Profit Maximization using Linear Programming (LP)
 This Python code uses the PuLP library to solve a Linear Programming problem for profit maximization. It aims to find the optimal production quantities of two products, Product A and Product B, while considering constraints on machine hours and labor hours. The objective is to maximize profit.
 
 
+---
 
 1. Importing Necessary Libraries
 
@@ -29,6 +30,9 @@ A linear programming model is created with the name profit-maximization.
 The sense of the problem is set to maximize (indicating a profit maximization problem).
 
 
+
+---
+
 3. Defining the Decision Variables
 
 A = LpVariable(name="Product_A", lowBound=0, cat="Continuous")
@@ -39,6 +43,8 @@ A and B are the decision variables representing the number of units of Product A
 Both variables are restricted to be non-negative (lowBound=0) and are continuous (i.e., they can take any real value).
 
 
+
+---
 
 4. Defining the Objective Function
 
@@ -55,27 +61,48 @@ The objective function is 40A + 50B, and is added to the model.
 
 
 
+---
+
 5. Defining the Constraints
 
 Machine Hours Constraint
+
 model += 2 * A + 4 * B <= 40, "Machine_Hours_Constraint"
+
 The total machine hours required for production cannot exceed 40.
+
 Product A requires 2 machine hours per unit, and Product B requires 4 machine hours per unit.
 
 The constraint is:
+
+
 2A + 4B \leq 40
+
 Labor Hours Constraint
+
 model += 3 * A + 2 * B <= 30, "Labor_Hours_Constraint"
+
 The total labor hours available are 30.
+
 Product A requires 3 labor hours per unit, and Product B requires 2 labor hours per unit.
+
 The constraint is:
+
+
 3A + 2B \leq 30
 
 
+---
+
 6. Solving the LP Problem
+
 model.solve()
+
 This line uses the PuLP solver to solve the LP problem. It finds the optimal values of A and B that maximize the profit while satisfying all the constraints.
 
+
+
+---
 
 7. Printing the Results
 
@@ -88,6 +115,8 @@ After solving the problem, the optimal values of A and B are printed. These valu
 The maximum profit is calculated by evaluating the objective function at the optimal values of A and B.
 
 
+
+---
 
 Final Output Example:
 
